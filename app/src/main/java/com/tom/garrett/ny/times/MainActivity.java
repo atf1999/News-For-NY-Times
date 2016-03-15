@@ -19,7 +19,7 @@ import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView textView = (TextView)findViewById(R.id.textView);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final TextView textView = (TextView)findViewById(R.id.textView);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://www.google.com";
