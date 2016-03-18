@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView textView = (TextView)findViewById(R.id.textView);
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://www.google.com";
+        String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json?callback=svc_search_v2_articlesearch&q=smoking&api-key=21d805213ef8fddec70b2d94b2f79afe%3A17%3A74747296";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -38,7 +43,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        textView.setText("Response is: " + response.substring(0, 500));
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            JSONObject set = obj.getJSONObject("response");
+                            JSONArray arr = set.getJSONArray("docs");
+                            JSONObject item = arr.getJSONObject(0);
+                            textView.setText(item.getString("web_url"));
+                        } catch(JSONException e){
+                            Log.d("JSONEXCEPTION", e.toString());
+                        }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
